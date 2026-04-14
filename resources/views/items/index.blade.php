@@ -6,9 +6,11 @@
     <h3>Item</h3>
 
     <div>
-        <a href="{{ route('items.create') }}" class="btn btn-primary">
-            + Tambah
-        </a>
+        @if(auth()->user()->role === 'admin')
+            <a href="{{ route('items.create') }}" class="btn btn-primary">
+                + Tambah
+            </a>
+        @endif
 
         <a href="{{ route('items.export') }}" class="btn btn-success">
             Export Excel

@@ -7,7 +7,7 @@
 
     <div>
         <a href="{{ route('borrowings.create') }}" class="btn btn-primary">
-            + Borrow Item
+            + Pinjam Barang
         </a>
 
         <a href="{{ route('borrowings.export') }}" class="btn btn-success">
