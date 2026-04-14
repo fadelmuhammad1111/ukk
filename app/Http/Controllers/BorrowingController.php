@@ -72,16 +72,17 @@ class BorrowingController extends Controller
         return view('borrowings.show', compact('borrowing'));
     }
 
-    public function destroy(BorrowedItem $borrowing)
+    public function destroy($id)
     {
-        if (!$borrowing->returned_at) {
-            $borrowing->item->increment('total_stock', $borrowing->total_item);
-            $borrowing->item->decrement('total_borrowed', $borrowing->total_item);
+        $borrowing = BorrowedItem::findOrFail($id);
+    
+        if (is_null($borrowing->returned_at)) {
+            return back()->with('error', 'Tidak bisa hapus, barang belum dikembalikan');
         }
-
+    
         $borrowing->delete();
-
-        return back()->with('success', 'Data peminjaman dihapus');
+    
+        return back()->with('success', 'Data peminjaman berhasil dihapus');
     }
 
     public function returnItem($id)

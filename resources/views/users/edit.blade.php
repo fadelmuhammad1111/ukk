@@ -5,7 +5,7 @@
 <h3>Edit User</h3>
 
 <div class="card shadow p-4">
-    <form action="/users-admin/{{ $user->id }}" method="POST">
+    <form action="{{ route('users.update', $user->id) }}" method="POST">
         @csrf
         @method('PUT')
 

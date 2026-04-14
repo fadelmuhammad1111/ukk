@@ -28,7 +28,13 @@ class ItemsExport implements
 
     public function collection()
     {
-        return Item::with('category')->get();
+        return Item::with('category')
+            ->withCount([
+                'borrowedItems as total_borrowed' => function ($q) {
+                    $q->whereNull('returned_at');
+                }
+            ])
+            ->get();
     }
 
     public function startCell(): string

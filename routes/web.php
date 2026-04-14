@@ -16,7 +16,7 @@ use App\Http\Controllers\BorrowingController;
 Route::get('/', function () {
     return auth()->check()
         ? redirect()->route('dashboard')
-        : redirect()->route('login');
+        : view('landing_page');
 });
 
 // LOGIN
@@ -125,31 +125,15 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | USERS (ADMIN + STAFF VIEW)
+    | USERS (ADMIN ONLY - FULL CRUD)
     |--------------------------------------------------------------------------
     */
 
-    Route::get('users', [UserController::class, 'index'])
-        ->name('users.index');
 
-    Route::get('users/{user}', [UserController::class, 'show'])
-        ->name('users.show');
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | USERS ADMIN ONLY ACTION
-    |--------------------------------------------------------------------------
-    */
-
-    Route::middleware('role:admin')->group(function () {
-
-        Route::resource('users-admin', UserController::class)
-            ->except(['index', 'show']);
+        Route::resource('users', UserController::class);
 
         Route::post('users/{user}/password', [UserController::class, 'updatePassword'])
             ->name('users.updatePassword');
-    });
 
 
     /*

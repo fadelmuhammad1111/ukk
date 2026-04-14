@@ -12,6 +12,9 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -51,6 +54,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="d-flex">
@@ -58,12 +62,11 @@
     <!-- SIDEBAR -->
     <div class="sidebar p-3" style="width:250px;">
 
-        <div class="brand mb-3">📦 Inventory</div>
+        <div class="brand mb-3">Inventory</div>
         <hr>
 
         <!-- DASHBOARD -->
         <a href="{{ route('dashboard') }}">Dashboard</a>
-
 
         {{-- ================= ADMIN ================= --}}
         @if(auth()->user()->role == 'admin')
@@ -75,7 +78,6 @@
             <a href="{{ route('users.index') }}">Users</a>
 
         @endif
-
 
         {{-- ================= STAFF ================= --}}
         @if(auth()->user()->role == 'staff')
@@ -100,10 +102,85 @@
 
     <!-- CONTENT -->
     <div class="p-4 w-100">
+
+        {{-- 🔥 TOASTR MESSAGE --}}
+        @if(session('success'))
+            <script>
+                window.onload = () => {
+                    toastr.success("{{ session('success') }}");
+                }
+            </script>
+        @endif
+
+        @if(session('error'))
+            <script>
+                window.onload = () => {
+                    toastr.error("{{ session('error') }}");
+                }
+            </script>
+        @endif
+
+        {{-- 🔥 VALIDATION ERROR --}}
+        @if($errors->any())
+            <script>
+                window.onload = () => {
+                    @foreach($errors->all() as $error)
+                        toastr.error("{{ $error }}");
+                    @endforeach
+                }
+            </script>
+        @endif
+
         @yield('content')
+
     </div>
 
 </div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{-- 🔥 TOASTR CONFIG --}}
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "timeOut": "3000"
+    };
+</script>
+
+{{-- 🔥 SWEET ALERT DELETE --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.form-delete').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Yakin?',
+                    text: "Data tidak bisa dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

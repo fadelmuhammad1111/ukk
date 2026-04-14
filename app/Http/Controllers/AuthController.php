@@ -26,9 +26,9 @@ class AuthController extends Controller
 
             // Redirect berdasarkan role
             if (auth()->user()->role === 'admin') {
-                return redirect()->route('categories.index');
+                return view('dashboard');
             } else {
-                return redirect()->route('borrowings.index');
+                return view('dashboard');
             }
         }
 
